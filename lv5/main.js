@@ -1,51 +1,69 @@
-function generateButtons() {
-  const gameDiv = document.createElement('div');
-  gameDiv.classList.add('game');
+let originalColors = [
+  "#87FE98", //1
+  // "#66C173", //2
+  "#4A8C53", //3
+  "#35653C", //4
+  // "#244428", //5
+  // "#2A3F4C", //6
+  "#426478", //7
+  "#5C8AA7", //8
+  // "#70A9CC", //9
+  "#8CD2FD", //10
+  // "#281B4E", //11
+  "#3D2975", //12
+  "#53389F", //13
+  // "#724DDB", //14
+  "#8459FC", //15
+  "#FCA06B", //16
+  // "#C77E54", //17
+  "#986141", //18
+  "#6C452E", //19
+  // "#533423", //20
+];
 
-  const buttonStyles = [
-      '#390000', '#660100', '#9a0100', '#cd0200', '#fc0200', '#fc1774', '#cf135f', '#a60f4c',
-      '#770b37', '#3c051b', '#4c1702', '#6c2104', '#942e05', '#c73d07', '#f84d09', '#adfc00',
-      '#8dce00', '#71a400', '#557c00', '#395300'
-  ];
-
-  const buttonTexts = ['⟶', '⟵', '', '⟶', '⟵', '', '⟵', '', '', '⟵', '⟶', '', '', '⟶', '', '', '⟵', '', ''];
-
-  for (let i = 0; i < 20; i++) {
-      const button = document.createElement('button');
-      button.id = 'button' + (i + 1);
-      button.textContent = buttonTexts[i];
-      if (i === 0 || i === 1 || i === 2 || i === 3 || i === 4) {
-          button.style.backgroundColor = buttonStyles[i];
-      } else if (i >= 5 && i <= 14) {
-          button.classList.add('st');
-      } else {
-          button.style.backgroundColor = buttonStyles[i];
-      }
-      gameDiv.appendChild(button);
-  }
-
-  return gameDiv;
+function hexToRgb(hex) {
+  const bigint = parseInt(hex.substring(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
+function checkWin() {
+  const buttonElements = document.querySelectorAll(".st");
+  console.log("Checking win...");
 
-const parentElement = document.querySelector('.box');
-parentElement.appendChild(generateButtons());
+  let isWin = true;
+  for (let i = 0; i < originalColors.length; i++) {
+    const currentColor = buttonElements[i].style.backgroundColor;
+    const originalColorRGB = hexToRgb(originalColors[i]);
+    console.log("Button color:", currentColor);
+    console.log("Original color:", originalColorRGB);
+    if (currentColor !== originalColorRGB) {
+      isWin = false;
+      break;
+    }
+  }
 
+  if (isWin) {
+    alert("Congratulations! You won!");
+    // window.location.href = "../lv4/index.html";
+  } else {
+    console.log("Not a win yet.");
+  }
+}
 
-
-
-
-let button = [
-  // "button1",
-  "button2",
+let buttons = [
+  "button1",
+  // "button2",
   "button3",
-  // "button4",
-  "button5",
-  "button6",
-  // "button7",
+  "button4",
+  // "button5",
+  // "button6",
+  "button7",
   "button8",
-  "button9",
-  // "button10",
+  // "button9",
+  "button10",
   // "button11",
   "button12",
   "button13",
@@ -57,55 +75,44 @@ let button = [
   "button19",
   // "button20",
 ];
-function shuffleColors() {
-  let colors = [
-    // "#281a45", //1
-    "#660100", //2
-    "#9A0100", //3
-    // "#CD0200", //4
-    "#FC0200", //5
-    "#FC1774", //6
-    // "#CF135F", //7
-    "#A60F4C", //8
-    "#770B37", //9
-    // "#047D02", //10
-    // "#bd6a5f", //11
-    "#6C2104", //12
-    "#942E05", //13
-    // "#C73D07", //14
-    "#F84D09", //15
-    "#ADFC00", //16
-    // "#8DCE00", //17
-    "#71A400", //18
-    "#557C00", //19
-    // "#ecfe86", //20
-  ];
+let colors = [
+  "#87FE98", //1
+  // "#66C173", //2
+  "#4A8C53", //3
+  "#35653C", //4
+  // "#244428", //5
+  // "#2A3F4C", //6
+  "#426478", //7
+  "#5C8AA7", //8
+  // "#70A9CC", //9
+  "#8CD2FD", //10
+  // "#281B4E", //11
+  "#3D2975", //12
+  "#53389F", //13
+  // "#724DDB", //14
+  "#8459FC", //15
+  "#FCA06B", //16
+  // "#C77E54", //17
+  "#986141", //18
+  "#6C452E", //19
+  // "#533423", //20
+];
 
+function shuffleColors() {
   colors.sort(() => Math.random() - 0.5);
 
-  const buttons = document.getElementsByClassName("st");
+  const buttonElements = document.getElementsByClassName("st");
 
   for (let i = 0; i < colors.length; i++) {
-    buttons[i].style.backgroundColor = colors[i];
+    buttonElements[i].style.backgroundColor = colors[i];
   }
-  // return shuffleColors();
 }
 
-function swab(event) {
-  const clickShape = event.target;
-
-  const selectedShape = document.querySelector(".button");
-
-  if (selectedShape && selectedShape !== clickShape) {
-    const tempColor = selectedShape.style.backgroundColor;
-    selectedShape.style.backgroundColor = clickShape.style.backgroundColor;
-    clickShape.style.backgroundColor = tempColor;
-    selectedShape.classList.remove("st");
-  } else if (selectedShape === clickShape) {
-    clickShape.classList.remove("st");
-  } else {
-    clickShape.classList.add("st");
-  }
+function swapColors(button1, button2) {
+  const color1 = button1.style.backgroundColor;
+  const color2 = button2.style.backgroundColor;
+  button1.style.backgroundColor = color2;
+  button2.style.backgroundColor = color1;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -119,14 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         swapColors(firstButton, this);
         firstButton = null;
+        checkWin();
       }
     });
   });
-
-  function swapColors(button1, button2) {
-    const color1 = button1.style.backgroundColor;
-    const color2 = button2.style.backgroundColor;
-    button1.style.backgroundColor = color2;
-    button2.style.backgroundColor = color1;
-  }
 });
